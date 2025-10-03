@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swarmly - Powered Collectively | Strategy & Facilitation</title>
+    <!-- Load Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Use Inter font family -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        /* Define custom colors and fonts using Tailwind Configuration */
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-gold': '#D4AF37', /* Collective Gold */
+                        'brand-black': '#000000', /* Strategic Black */
+                        'brand-teal': '#00B5AD', /* Synergy Teal */
+                        'brand-white': '#FFFFFF', /* Anchor White */
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    keyframes: {
+                        swarm: {
+                            /* Enhanced subtle movement for a sophisticated 'swarm' effect */
+                            '0%, 100%': { transform: 'translate(0, 0) rotate(0deg) scale(1)' },
+                            '25%': { transform: 'translate(15px, -15px) rotate(2deg) scale(1.1)' },
+                            '50%': { transform: 'translate(-15px, 15px) rotate(-2deg) scale(0.9)' },
+                            '75%': { transform: 'translate(7px, 7px) rotate(1deg) scale(1)' },
+                        }
+                    },
+                    animation: {
+                        swarm: 'swarm 12s ease-in-out infinite', /* Slowed duration for strategic feel */
+                    }
+                }
+            }
+        }
+        /* Custom global styles for the dark theme */
+        body {
+            background-color: #000000;
+            color: #FFFFFF;
+        }
+
+        /* Styling for the abstract particle effect in the Hero */
+        .particle {
+            position: absolute;
+            background: rgba(212, 175, 55, 0.4); /* Subtle Collective Gold */
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: swarm linear infinite alternate;
+        }
+        .particle-1 { width: 4px; height: 4px; top: 10%; left: 5%; animation-duration: 10s; }
+        .particle-2 { width: 6px; height: 6px; top: 50%; left: 80%; animation-duration: 12s; }
+        .particle-3 { width: 3px; height: 3px; top: 90%; left: 30%; animation-duration: 9s; }
+        .particle-4 { width: 5px; height: 5px; top: 30%; left: 60%; animation-duration: 11s; }
+        .particle-5 { width: 7px; height: 7px; top: 70%; left: 15%; animation-duration: 15s; }
+        /* ADDED: New particles for a richer, denser 'swarm' visual */
+        .particle-6 { width: 4px; height: 4px; top: 25%; left: 95%; animation-duration: 14s; }
+        .particle-7 { width: 6px; height: 6px; top: 75%; left: 50%; animation-duration: 8s; }
+        .particle-8 { width: 3px; height: 3px; top: 5%; left: 40%; animation-duration: 16s; }
+
+
+        /* General component styling */
+        .card {
+            background-color: #1a1a1a;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #D4AF37;
+            box-shadow: 0 10px 15px -3px rgba(212, 175, 55, 0.1), 0 4px 6px -2px rgba(212, 175, 55, 0.05);
+        }
+
+    </style>
+</head>
+<body class="font-sans min-h-screen">
+
+    <!-- Header & Navigation -->
+    <header class="sticky top-0 z-50 bg-brand-black/90 backdrop-blur-sm shadow-lg shadow-brand-gold/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <!-- Logo (Implementing light-to-dark gold gradient text as per concept) -->
+            <button onclick="navigateTo('home')" class="text-3xl font-bold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-brand-gold to-yellow-600 transition duration-300 hover:opacity-80">
+                SWARM LY
+            </button>
+
+            <!-- Desktop Navigation -->
+            <nav class="hidden md:flex space-x-8">
+                <button onclick="navigateTo('home')" class="nav-link text-brand-white hover:text-brand-gold transition duration-150 active-link" data-page="home">Home</button>
+                <button onclick="navigateTo('services')" class="nav-link text-brand-white hover:text-brand-gold transition duration-150" data-page="services">Services</button>
+                <button onclick="navigateTo('casestudies')" class="nav-link text-brand-white hover:text-brand-gold transition duration-150" data-page="casestudies">Case Studies</button>
+                <button onclick="navigateTo('about')" class="nav-link text-brand-white hover:text-brand-gold transition duration-150" data-page="about">About Us</button>
+                <a href="#contact-section" onclick="navigateTo('contact')" class="nav-link bg-brand-gold px-4 py-2 rounded-full text-brand-black font-semibold hover:bg-yellow-600 transition duration-150" data-page="contact">Contact</a>
+            </nav>
+
+            <!-- Mobile Menu Button (Hamburger) -->
+            <button id="mobile-menu-btn" class="md:hidden text-brand-white focus:outline-none">
+                <!-- SVG Icon for Menu -->
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="hidden md:hidden fixed inset-0 z-40 bg-brand-black/95">
+        <div class="flex flex-col items-center justify-center space-y-8 h-full">
+            <button onclick="navigateTo('home'); toggleMobileMenu()" class="text-4xl font-light text-brand-white hover:text-brand-gold">Home</button>
+            <button onclick="navigateTo('services'); toggleMobileMenu()" class="text-4xl font-light text-brand-white hover:text-brand-gold">Services</button>
+            <button onclick="navigateTo('casestudies'); toggleMobileMenu()" class="text-4xl font-light text-brand-white hover:text-brand-gold">Case Studies</button>
+            <button onclick="navigateTo('about'); toggleMobileMenu()" class="text-4xl font-light text-brand-white hover:text-brand-gold">About Us</button>
+            <button onclick="navigateTo('contact'); toggleMobileMenu()" class="text-4xl font-light bg-brand-gold px-6 py-3 rounded-full text-brand-black font-semibold mt-8">Contact</button>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main id="content-container">
+        <!-- Content for each page will be dynamically injected/shown here -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-brand-black border-t border-brand-gold/20 mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center text-brand-white/70">
+            <div class="text-2xl font-bold tracking-wider text-brand-gold mb-4">SWARM LY</div>
+            <p class="mb-6">Empowering non-profit and commercial organisations. Powered Collectively.</p>
+            <div class="flex justify-center space-x-6 mb-6">
+                <a href="#" class="hover:text-brand-gold transition duration-150">Privacy Policy</a>
+                <a href="#" class="hover:text-brand-gold transition duration-150">Terms of Service</a>
+                <a href="#" class="hover:text-brand-gold transition duration-150">Careers</a>
+            </div>
+            <p>&copy; <span id="year"></span> Swarmly. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // --- Data Definitions ---
+
+        const COLORS = {
+            gold: '#D4AF37',
+            teal: '#00B5AD',
+            white: '#FFFFFF',
+            black: '#000000',
+            dark_gray: '#1a1a1a'
+        };
+
+        const SERVICES_DATA = [
+            {
+                id: 'team-dev',
+                title: 'Team Development',
+                icon: '<svg class="w-10 h-10 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h-5m-5 0h5m0 0a1 1 0 01-1-1v-4a1 1 0 00-1-1H9a1 1 0 00-1 1v4a1 1 0 01-1 1zm8 0a1 1 0 00-1-1v-4a1 1 0 01-1-1H11a1 1 0 01-1 1v4a1 1 0 00-1 1m4-11H9m6 0a2 2 0 100-4 2 2 0 000 4zm-6 0a2 2 0 100-4 2 2 0 000 4z"></path></svg>', // Users icon
+                shortDesc: 'Building cohesive, high-trust teams that communicate effectively and share a clear mission.',
+                painPoints: ['Poor internal communication & silos', 'Lack of shared vision or mission', 'Low team morale or engagement'],
+                approach: 'We use structured facilitation techniques to address underlying conflict, clarify roles, and establish operating agreements, ensuring every voice is heard and valued.',
+                outcomes: ['High-trust internal culture', 'Measurable communication improvements', 'Clear role clarity and accountability'],
+                caseStudy: {
+                    title: 'Non-Profit Leadership Alignment',
+                    metric: '50% reduction in decision-making cycle time.',
+                }
+            },
+            {
+                id: 'training',
+                title: 'Practice-based Training',
+                icon: '<svg class="w-10 h-10 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 21h7a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-2.414-2.414A1 1 0 0015.586 6H7a2 2 0 00-2 2v11a2 2 0 002 2z"></path></svg>', // File icon
+                shortDesc: 'Hands-on, results-oriented training focused on applying new frameworks directly to operational challenges.',
+                painPoints: ['Training that doesn\'t stick', 'Skill gaps in process management', 'Lack of standardised operational knowledge'],
+                approach: 'Our training modules are practice-based: teams work on their own real-world projects during the sessions, ensuring immediate relevance and application of new skills and tools.',
+                outcomes: ['Immediate application of new skills', 'Standardised practices and tool usage', 'Improved process management capabilities'],
+                caseStudy: {
+                    title: 'Commercial Project Management Rollout',
+                    metric: '90% adoption rate of new Agile framework within one quarter.',
+                }
+            },
+            {
+                id: 'op-improve',
+                title: 'Operational Improvement',
+                icon: '<svg class="w-10 h-10 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13.5M9 19H5a2 2 0 01-2-2v-4M9 19v-6a2 2 0 012-2h4a2 2 0 012 2v6m-7 0a2 2 0 100-4 2 2 0 000 4zm8 0a2 2 0 100-4 2 2 0 000 4z"></path></svg>', // Trello/Board icon
+                shortDesc: 'Streamlining processes and workflows to eliminate waste, reduce friction, and boost efficiency and speed.',
+                painPoints: ['Slow project delivery and bottlenecks', 'Wasted time on manual or redundant tasks', 'Unclear metrics for success or performance'],
+                approach: 'We apply collective intelligence mapping (CIM) to visualize current state operations, identify critical friction points, and co-design a lean, efficient future state.',
+                outcomes: ['Reduced operational costs and time', 'Optimized workflows and process maps', 'Increased speed and quality of delivery'],
+                caseStudy: {
+                    title: 'Global Logistics Process Redesign',
+                    metric: 'Reduced supply chain bottlenecks by 18% in six months.',
+                }
+            },
+            {
+                id: 'strategy',
+                title: 'Strategic Planning',
+                icon: '<svg class="w-10 h-10 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h4v4H3m4-4h4v4H7m4-4h4v4h-4m4-4h4v4h-4m-4-4h4v4h-4m-4-4h4v4H7m8-4h4v4h-4m-4-4h4v4h-4m4-4h4v4h-4m-4-4h4v4H7m-4-4h4v4H7M3 6v12M21 6v12"></path></svg>', // Grid/Map icon
+                shortDesc: 'Designing clear, executable strategies that ensure alignment from the board room to the front line.',
+                painPoints: ['Strategies that sit on a shelf', 'Lack of organizational buy-in for the plan', 'Disjointed departmental goals'],
+                approach: 'Our facilitation process ensures every key stakeholder contributes to and owns the final strategic roadmap, moving strategy from a document to a living, executable plan.',
+                outcomes: ['Fully aligned 3- or 5-year roadmap', 'High organizational investment in the strategy', 'Clear, measurable annual key results (KRs)'],
+                caseStudy: {
+                    title: 'Commercial Market Entry Strategy',
+                    metric: 'Achieved 100% target organizational alignment score post-facilitation.',
+                }
+            }
+        ];
+
+        const TESTIMONIALS = [
+            {
+                quote: "Swarmly didn't just give us a plan, they facilitated the creation of a strategy we all genuinely own. We saw a 15% improvement in project turnaround time within three months.",
+                author: "Sarah J.",
+                title: "COO, Technology Scale-up"
+            },
+            {
+                quote: "The practice-based training was a game changer. We applied the new process framework directly to our most complex challenge, solving it during the session itself.",
+                author: "Michael R.",
+                title: "Director of Operations, Global NGO"
+            },
+            {
+                quote: "The team development work unlocked a level of candid communication we hadn't experienced. Our internal conflict dipped dramatically, and innovation soared.",
+                author: "Lena K.",
+                title: "VP of People, FinTech"
+            }
+        ];
+
+        const CASE_STUDIES = [
+            {
+                id: 'case-1',
+                title: 'Aligning a Dispersed Non-Profit Leadership Team',
+                problem: 'A national non-profit with chapters across the country suffered from strategic drift and inconsistent messaging due to poor alignment between the central leadership and regional directors.',
+                process: 'We conducted a 2-day virtual facilitation utilizing collective intelligence mapping (CIM) to surface hidden priorities and collaborative decision-making frameworks to build consensus on core strategic pillars.',
+                outcome: 'The team achieved **100% alignment** on the 3-year strategic objectives and established new operational rhythms, resulting in a **30% increase in fundraising consistency** across all chapters.',
+                metric: '30% Increase in Fundraising Consistency'
+            },
+            {
+                id: 'case-2',
+                title: 'Boosting Delivery Speed for a Commercial SaaS Product',
+                problem: 'A rapidly growing SaaS company was hitting scaling bottlenecks, leading to delayed feature releases, employee burnout, and client dissatisfaction.',
+                process: 'Swarmly implemented an Operational Improvement program, focusing on practice-based training for the engineering leads and facilitating a Lean process mapping exercise for the product lifecycle.',
+                outcome: 'The organization reduced its average feature delivery time by **22%** and, through new team agreements, decreased reported staff burnout by **45%** in the following quarter.',
+                metric: '22% Reduction in Feature Delivery Time'
+            }
+        ];
+
+
+        // --- Navigation and Routing Logic ---
+
+        let currentPage = 'home';
+        const contentContainer = document.getElementById('content-container');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+
+        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+
+        function toggleMobileMenu() {
+            mobileMenu.classList.toggle('hidden');
+            // Toggle the menu button icon (optional, but good UX)
+            // For simplicity, we just toggle visibility
+        }
+
+        function setActiveLink(pageId) {
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active-link', 'text-brand-gold', 'border-b-2', 'border-brand-gold', 'font-bold');
+                link.classList.add('text-brand-white');
+                if (link.getAttribute('data-page') === pageId) {
+                    link.classList.add('active-link', 'text-brand-gold', 'border-b-2', 'border-brand-gold', 'font-bold');
+                    link.classList.remove('text-brand-white');
+                }
+            });
+            // Specific handling for the 'Contact' CTA button
+            const contactBtn = document.querySelector('a[data-page="contact"]');
+            if (pageId === 'contact') {
+                contactBtn.classList.remove('bg-brand-gold/80');
+                contactBtn.classList.add('bg-brand-gold');
+            } else {
+                contactBtn.classList.add('bg-brand-gold');
+                contactBtn.classList.remove('bg-brand-gold/80');
+            }
+        }
+
+        function navigateTo(pageId, serviceId = null) {
+            currentPage = pageId;
+            setActiveLink(pageId);
+            renderContent(pageId, serviceId);
+            window.scrollTo(0, 0); // Scroll to top on navigation
+        }
+
+        // --- HTML Content Generation Functions ---
+
+        // Reusable CTA button template
+        const getCTAButton = (text) => `
+            <a href="mailto:contact@swarmly.co" class="inline-block px-10 py-4 bg-brand-gold text-brand-black font-extrabold text-lg rounded-full shadow-2xl shadow-brand-gold/40 hover:bg-yellow-600 transition duration-300 transform hover:scale-[1.02] active:scale-[0.98]">
+                ${text}
+            </a>
+        `;
+
+        // Card component for services
+        const getServiceCard = (service) => `
+            <button onclick="navigateTo('service-detail', '${service.id}')" class="card rounded-2xl p-6 md:p-8 flex flex-col items-start text-left cursor-pointer">
+                <div class="mb-4">${service.icon}</div>
+                <h3 class="text-xl md:text-2xl font-semibold text-brand-gold mb-3">${service.title}</h3>
+                <p class="text-brand-white/80">${service.shortDesc}</p>
+                <span class="mt-4 text-brand-teal font-medium hover:underline flex items-center">
+                    Learn More 
+                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </span>
+            </button>
+        `;
+
+        // Section for Trusted By / Logos
+        const getTrustedBySection = () => `
+            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+                <h2 class="text-center text-xl font-medium text-brand-white/60 mb-10">Trusted by leading organizations, non-profit and commercial</h2>
+                <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-80">
+                    <img src="https://placehold.co/120x40/1a1a1a/FFFFFF?text=Org+A" alt="Client Logo A" class="h-8 md:h-10 filter grayscale hover:grayscale-0 transition duration-300">
+                    <img src="https://placehold.co/120x40/1a1a1a/FFFFFF?text=Foundation+B" alt="Client Logo B" class="h-8 md:h-10 filter grayscale hover:grayscale-0 transition duration-300">
+                    <img src="https://placehold.co/120x40/1a1a1a/FFFFFF?text=Corp+C" alt="Client Logo C" class="h-8 md:h-10 filter grayscale hover:grayscale-0 transition duration-300">
+                    <img src="https://placehold.co/120x40/1a1a1a/FFFFFF?text=Charity+D" alt="Client Logo D" class="h-8 md:h-10 filter grayscale hover:grayscale-0 transition duration-300">
+                    <img src="https://placehold.co/120x40/1a1a1a/FFFFFF?text=Industry+E" alt="Client Logo E" class="h-8 md:h-10 filter grayscale hover:grayscale-0 transition duration-300">
+                </div>
+            </section>
+        `;
+
+        // Section for How It Works
+        const getHowItWorksSection = () => `
+            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20 text-center">
+                <span class="text-brand-teal uppercase text-sm font-bold tracking-widest mb-2 block">Our Methodology</span>
+                <h2 class="text-4xl md:text-5xl font-extrabold text-brand-white mb-12">The Swarmly Process: From Discovery to Activation</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                    <!-- Step 1: Discover -->
+                    <div class="p-8 card rounded-2xl">
+                        <div class="w-12 h-12 flex items-center justify-center rounded-full bg-brand-gold/20 text-brand-gold mx-auto mb-4">
+                            <span class="text-2xl font-extrabold">1</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-3">Discover</h3>
+                        <p class="text-brand-white/70">We dive deep to understand your unique challenges, organizational dynamics, and core objectives through comprehensive interviews and data analysis.</p>
+                    </div>
+
+                    <!-- Step 2: Align (with connector) -->
+                    <div class="p-8 card rounded-2xl">
+                        <div class="w-12 h-12 flex items-center justify-center rounded-full bg-brand-gold/20 text-brand-gold mx-auto mb-4">
+                            <span class="text-2xl font-extrabold">2</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-3">Align</h3>
+                        <p class="text-brand-white/70">We facilitate immersive sessions to harness your team's collective intelligence, build consensus, and forge a clear, unified path forward everyone believes in.</p>
+                    </div>
+
+                    <!-- Step 3: Activate -->
+                    <div class="p-8 card rounded-2xl">
+                        <div class="w-12 h-12 flex items-center justify-center rounded-full bg-brand-gold/20 text-brand-gold mx-auto mb-4">
+                            <span class="text-2xl font-extrabold">3</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-3">Activate</h3>
+                        <p class="text-brand-white/70">We equip you with the specific tools, practical frameworks, and follow-up support to turn strategy into sustained, measurable action and lasting results.</p>
+                    </div>
+                </div>
+            </section>
+        `;
+
+        // Section for Testimonials
+        const getTestimonialsSection = () => `
+            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20 bg-brand-black/80">
+                <h2 class="text-center text-4xl font-extrabold text-brand-white mb-12">What Our Clients Say</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    ${TESTIMONIALS.map(t => `
+                        <div class="p-6 rounded-xl bg-brand-gold/10 border-l-4 border-brand-gold shadow-lg">
+                            <svg class="w-8 h-8 text-brand-gold mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7.747 16.5c0-1.879 1.109-3.758 3.328-5.637 1.118-1.002 1.944-2.147 1.944-3.52 0-1.88-1.554-3.425-3.472-3.425C7.712 3.918 6 5.463 6 7.343h1.747c0-.868.75-1.575 1.688-1.575.937 0 1.688.707 1.688 1.575 0 .822-.43 1.575-1.42 2.51l-4.225 3.945V16.5h6.147zm9.6 0c0-1.879 1.109-3.758 3.328-5.637 1.118-1.002 1.944-2.147 1.944-3.52 0-1.88-1.554-3.425-3.472-3.425-1.88 0-3.472 1.545-3.472 3.425h1.747c0-.868.75-1.575 1.688-1.575.937 0 1.688.707 1.688 1.575 0 .822-.43 1.575-1.42 2.51l-4.225 3.945V16.5h6.147z"></path></svg>
+                            <p class="italic text-lg text-brand-white mb-4">"${t.quote}"</p>
+                            <p class="font-semibold text-brand-teal">${t.author}</p>
+                            <p class="text-sm text-brand-white/50">${t.title}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            </section>
+        `;
+
+        // --- Page Layouts ---
+
+        const renderHomePage = () => `
+            <!-- Hero Section -->
+            <section class="relative h-screen flex items-center justify-center overflow-hidden">
+                <!-- Abstract Swarm Particle Animation Background (Enhanced for brand concept) -->
+                <div class="absolute inset-0 z-0">
+                    <div class="particle particle-1" style="left: 10%; top: 20%;"></div>
+                    <div class="particle particle-2" style="left: 80%; top: 60%;"></div>
+                    <div class="particle particle-3" style="left: 30%; top: 90%;"></div>
+                    <div class="particle particle-4" style="left: 55%; top: 10%;"></div>
+                    <div class="particle particle-5" style="left: 5%; top: 80%;"></div>
+                    <div class="particle particle-4" style="left: 40%; top: 70%;"></div>
+                    <!-- Added new particles for enhanced Swarm effect -->
+                    <div class="particle particle-6" style="left: 95%; top: 25%;"></div>
+                    <div class="particle particle-7" style="left: 50%; top: 75%;"></div>
+                    <div class="particle particle-8" style="left: 40%; top: 5%;"></div>
+                </div>
+
+                <div class="relative z-10 text-center max-w-4xl mx-auto px-4">
+                    <h1 class="text-6xl md:text-8xl font-extrabold text-brand-white leading-tight mb-4">
+                        Unleash Your <span class="text-brand-gold">Collective Potential</span>.
+                    </h1>
+                    <p class="text-xl md:text-2xl text-brand-white/90 mb-8 max-w-2xl mx-auto">
+                        We facilitate transformative growth for teams and organisations through structured collaboration.
+                        <span class="text-brand-teal font-semibold block mt-2">Powered Collectively.</span>
+                    </p>
+                    ${getCTAButton('Book a Discovery Call')}
+                </div>
+            </section>
+
+            <!-- Trusted By -->
+            ${getTrustedBySection()}
+
+            <!-- Our Services (Icon Grid) -->
+            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+                <span class="text-brand-teal uppercase text-sm font-bold tracking-widest mb-2 block text-center">Our Focus Areas</span>
+                <h2 class="text-4xl md:text-5xl font-extrabold text-brand-white mb-12 text-center">The Four Pillars of Collective Power</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    ${SERVICES_DATA.map(getServiceCard).join('')}
+                </div>
+            </section>
+
+            <!-- How It Works (3 Steps) -->
+            ${getHowItWorksSection()}
+
+            <!-- Testimonials -->
+            ${getTestimonialsSection()}
+
+            <!-- Final CTA -->
+            <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 text-center">
+                <div class="bg-brand-gold/10 rounded-3xl p-10 md:p-16 border border-brand-gold/30">
+                    <h2 class="text-4xl md:text-5xl font-extrabold text-brand-white mb-4">
+                        Ready to build a more <span class="text-brand-gold">effective</span> organisation?
+                    </h2>
+                    <p class="text-xl text-brand-white/80 mb-8">
+                        Let's discuss how Swarmly can facilitate your next breakthrough.
+                    </p>
+                    ${getCTAButton("Let's Talk Strategy")}
+                </div>
+            </section>
+        `;
+
+        const renderServicesPage = () => `
+            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+                <span class="text-brand-teal uppercase text-sm font-bold tracking-widest mb-2 block">Our Full Spectrum</span>
+                <h1 class="text-5xl md:text-7xl font-extrabold text-brand-white mb-16">Facilitation & <span class="text-brand-gold">Training Services</span></h1>
+
+                <div class="space-y-16">
+                    ${SERVICES_DATA.map(service => `
+                        <div class="card rounded-2xl p-6 md:p-12">
+                            <div class="flex items-center mb-6">
+                                ${service.icon}
+                                <h2 class="text-4xl font-bold text-brand-white ml-4">${service.title}</h2>
+                            </div>
+                            <p class="text-xl text-brand-white/80 mb-8">${service.shortDesc}</p>
+
+                            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                                <div>
+                                    <h3 class="text-2xl font-semibold text-brand-gold mb-3">Who is this for?</h3>
+                                    <ul class="list-disc pl-5 space-y-2 text-brand-white/70">
+                                        ${service.painPoints.map(point => `<li>${point}</li>`).join('')}
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-semibold text-brand-gold mb-3">Our Unique Approach</h3>
+                                    <p class="text-brand-white/70">${service.approach}</p>
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-semibold text-brand-gold mb-3">Expected Outcomes</h3>
+                                    <ul class="list-disc pl-5 space-y-2 text-brand-teal">
+                                        ${service.outcomes.map(outcome => `<li>${outcome}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-10 pt-6 border-t border-brand-white/10">
+                                <span class="text-sm font-semibold text-brand-white/50 block mb-2">Relevant Success:</span>
+                                <p class="text-lg italic text-brand-white">${service.caseStudy.title} | <span class="font-bold text-brand-teal">${service.caseStudy.metric}</span></p>
+                                <button onclick="navigateTo('casestudies')" class="text-brand-gold hover:underline mt-2">See all Case Studies &rarr;</button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </section>
+        `;
+
+        const renderServiceDetailPage = (serviceId) => {
+            const service = SERVICES_DATA.find(s => s.id === serviceId);
+            if (!service) return `
+                <div class="max-w-7xl mx-auto px-4 py-20 text-center">
+                    <h1 class="text-3xl text-red-500">Service Not Found.</h1>
+                    <button onclick="navigateTo('services')" class="mt-8 text-brand-gold hover:underline">&larr; Back to Services</button>
+                </div>
+            `;
+
+            return `
+                <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+                    <button onclick="navigateTo('services')" class="text-brand-white/60 hover:text-brand-gold transition duration-150 mb-8 flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        Back to All Services
+                    </button>
+                    
+                    <div class="flex items-center mb-6">
+                        ${service.icon}
+                        <h1 class="text-5xl md:text-6xl font-extrabold text-brand-white ml-4">${service.title}</h1>
+                    </div>
+                    <p class="text-2xl text-brand-gold font-light mb-12">${service.shortDesc}</p>
+
+                    <!-- Content Structure -->
+                    <div class="space-y-12">
+                        <!-- What is it? -->
+                        <div class="p-6 card rounded-xl">
+                            <h2 class="text-3xl font-bold text-brand-teal mb-4">Strategic Planning that Actually Works</h2>
+                            <p class="text-brand-white/80 leading-relaxed">Most strategic plans fail at the implementation phase due to lack of organizational buy-in. Swarmly ensures your strategy is built *by* the collective, not just *for* them. We move strategy from a shelf document to a living, executable framework.</p>
+                        </div>
+
+                        <!-- Who is this for? -->
+                        <div class="p-6 card rounded-xl">
+                            <h2 class="text-3xl font-bold text-brand-teal mb-4">Common Pain Points We Solve</h2>
+                            <ul class="grid grid-cols-1 md:grid-cols-2 gap-4 list-disc pl-6 text-brand-white/80">
+                                ${service.painPoints.map(point => `<li class="font-medium">${point}</li>`).join('')}
+                            </ul>
+                        </div>
+
+                        <!-- Expected Outcomes -->
+                        <div class="p-6 card rounded-xl bg-brand-gold/10 border-brand-gold">
+                            <h2 class="text-3xl font-bold text-brand-gold mb-4">Measurable Outcomes</h2>
+                            <ul class="list-disc pl-6 space-y-3 text-brand-white font-medium">
+                                ${service.outcomes.map(outcome => `<li>${outcome}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="mt-16 text-center">
+                        ${getCTAButton(`Start Your ${service.title} Project`)}
+                    </div>
+                </section>
+            `;
+        };
+
+        const renderCaseStudiesPage = () => `
+            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+                <span class="text-brand-teal uppercase text-sm font-bold tracking-widest mb-2 block">Proof of Collective Power</span>
+                <h1 class="text-5xl md:text-7xl font-extrabold text-brand-white mb-16">Measurable <span class="text-brand-gold">Impact</span></h1>
+
+                <div class="space-y-12">
+                    ${CASE_STUDIES.map(study => `
+                        <div class="card rounded-2xl p-8 md:p-12">
+                            <h2 class="text-4xl font-extrabold text-brand-white mb-2">${study.title}</h2>
+                            <p class="text-brand-gold text-2xl font-bold mb-8">${study.metric}</p>
+
+                            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 text-brand-white/80">
+                                <div>
+                                    <h3 class="text-xl font-semibold text-brand-teal mb-3">Problem</h3>
+                                    <p>${study.problem}</p>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-semibold text-brand-teal mb-3">Process</h3>
+                                    <p>${study.process}</p>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-semibold text-brand-teal mb-3">Outcome</h3>
+                                    <p>${study.outcome}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </section>
+        `;
+
+        const renderAboutUsPage = () => `
+            <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+                <span class="text-brand-teal uppercase text-sm font-bold tracking-widest mb-2 block">Our Foundation</span>
+                <h1 class="text-5xl md:text-7xl font-extrabold text-brand-white mb-12">The <span class="text-brand-gold">Swarmly</span> Philosophy</h1>
+
+                <!-- Core Philosophy -->
+                <div class="card rounded-2xl p-8 md:p-12 mb-16">
+                    <h2 class="text-3xl font-bold text-brand-teal mb-4">We Believe in Collective Power.</h2>
+                    <p class="text-xl text-brand-white/80 leading-relaxed">
+                        At Swarmly, we exist to unlock the incredible, often dormant, intelligence within your organization. We don't bring canned solutions; we bring frameworks that ensure every stakeholder's perspective is heard, aligned, and turned into action. The complexity of today's challenges demands a **collective response**—and our job is to facilitate that response into a singular, powerful direction.
+                    </p>
+                    <p class="text-xl text-brand-white/80 leading-relaxed mt-4">
+                        Our method is rooted in the belief that the solutions already exist within your team. We are the experienced catalysts that transform internal knowledge into measurable, operational improvement and strategic clarity.
+                    </p>
+                </div>
+
+                <!-- Facilitator Bios (Mock) -->
+                <h2 class="text-4xl font-extrabold text-brand-white mb-10 text-center">Meet the Catalysts</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div class="card rounded-2xl p-6 flex flex-col items-center text-center">
+                        <img src="https://placehold.co/150x150/1a1a1a/D4AF37?text=J+D" alt="Facilitator Jane Doe" class="rounded-full w-36 h-36 object-cover mb-4 border-4 border-brand-gold/50">
+                        <h3 class="text-2xl font-bold text-brand-gold">Jane Doe</h3>
+                        <p class="text-brand-teal font-medium mb-3">Principal Strategist & Facilitator</p>
+                        <p class="text-brand-white/70 text-sm">Jane specializes in non-profit strategic planning and alignment. Her background in organizational psychology ensures sessions are deeply collaborative and focused on long-term systemic change.</p>
+                    </div>
+                    <div class="card rounded-2xl p-6 flex flex-col items-center text-center">
+                        <img src="https://placehold.co/150x150/1a1a1a/D4AF37?text=A+S" alt="Facilitator Alex Smith" class="rounded-full w-36 h-36 object-cover mb-4 border-4 border-brand-gold/50">
+                        <h3 class="text-2xl font-bold text-brand-gold">Alex Smith</h3>
+                        <p class="text-brand-teal font-medium mb-3">Operational Improvement Lead</p>
+                        <p class="text-brand-white/70 text-sm">Alex leads our commercial practice, focusing on leveraging data and Lean methodologies to drive measurable operational improvements and efficiency in fast-paced corporate environments.</p>
+                    </div>
+                </div>
+            </section>
+        `;
+
+        const renderContactPage = () => `
+            <section id="contact-section" class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+                <span class="text-brand-teal uppercase text-sm font-bold tracking-widest mb-2 block text-center">Let's Connect</span>
+                <h1 class="text-5xl md:text-7xl font-extrabold text-brand-white mb-12 text-center">Start the <span class="text-brand-gold">Conversation</span></h1>
+
+                <div class="card rounded-2xl p-8 md:p-12">
+                    <p class="text-xl text-brand-white/80 mb-8 text-center">
+                        Use the form below or book directly to schedule your free, no-obligation discovery call.
+                    </p>
+
+                    <!-- Contact Details & Booking Link -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 text-center">
+                        <div class="p-4 bg-brand-black/50 rounded-lg">
+                            <span class="text-brand-teal block font-semibold">Email Us</span>
+                            <a href="mailto:contact@swarmly.co" class="text-brand-white hover:text-brand-gold">contact@swarmly.co</a>
+                        </div>
+                        <div class="p-4 bg-brand-black/50 rounded-lg">
+                            <span class="text-brand-teal block font-semibold">Call Us</span>
+                            <a href="tel:+61412345678" class="text-brand-white hover:text-brand-gold">+61 4 1234 5678</a>
+                        </div>
+                        <div class="p-4 bg-brand-gold/20 rounded-lg">
+                            <span class="text-brand-teal block font-semibold">Direct Booking</span>
+                            <a href="#" class="text-brand-gold font-bold hover:underline">Book A Discovery Call &rarr;</a>
+                        </div>
+                    </div>
+
+                    <!-- Simple Contact Form (Frontend only) -->
+                    <form onsubmit="handleFormSubmit(event)" class="space-y-6">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-brand-white/70 mb-1">Your Name</label>
+                            <input type="text" id="name" required class="w-full p-3 rounded-lg bg-brand-black/50 border border-brand-white/10 focus:border-brand-gold focus:ring focus:ring-brand-gold/50 text-brand-white">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-brand-white/70 mb-1">Work Email</label>
+                            <input type="email" id="email" required class="w-full p-3 rounded-lg bg-brand-black/50 border border-brand-white/10 focus:border-brand-gold focus:ring focus:ring-brand-gold/50 text-brand-white">
+                        </div>
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-brand-white/70 mb-1">How can Swarmly help?</label>
+                            <textarea id="message" rows="4" required class="w-full p-3 rounded-lg bg-brand-black/50 border border-brand-white/10 focus:border-brand-gold focus:ring focus:ring-brand-gold/50 text-brand-white"></textarea>
+                        </div>
+                        <button type="submit" class="w-full mt-4 px-6 py-3 bg-brand-gold text-brand-black font-extrabold rounded-lg hover:bg-yellow-600 transition duration-300">
+                            Send Inquiry
+                        </button>
+                        <p id="form-message" class="text-center mt-4 text-brand-teal hidden"></p>
+                    </form>
+                </div>
+            </section>
+        `;
+
+        // --- Core Rendering Function ---
+
+        function renderContent(pageId, detailId = null) {
+            let content = '';
+            switch (pageId) {
+                case 'home':
+                    content = renderHomePage();
+                    break;
+                case 'services':
+                    content = renderServicesPage();
+                    break;
+                case 'service-detail':
+                    content = renderServiceDetailPage(detailId);
+                    break;
+                case 'casestudies':
+                    content = renderCaseStudiesPage();
+                    break;
+                case 'about':
+                    content = renderAboutUsPage();
+                    break;
+                case 'contact':
+                    content = renderContactPage();
+                    break;
+                default:
+                    content = renderHomePage();
+            }
+            contentContainer.innerHTML = content;
+        }
+
+        // --- Utility Functions ---
+
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            const messageEl = document.getElementById('form-message');
+            messageEl.textContent = 'Thank you for your inquiry! We will be in touch shortly.';
+            messageEl.classList.remove('hidden');
+
+            // In a real application, you would send this data to a backend server here.
+            setTimeout(() => {
+                messageEl.classList.add('hidden');
+                event.target.reset(); // Clear the form
+            }, 5000);
+        }
+
+        // Initialize the app on load
+        window.onload = () => {
+            // Check for a deep link (e.g., #contact) and navigate there
+            const hash = window.location.hash.substring(1);
+            if (hash && hash !== 'contact-section') {
+                navigateTo(hash);
+            } else if (hash === 'contact-section') {
+                navigateTo('contact');
+            }
+            else {
+                navigateTo('home');
+            }
+        };
+
+    </script>
+</body>
+</html>
